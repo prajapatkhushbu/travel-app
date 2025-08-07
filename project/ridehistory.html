@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride History</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+            background-color: #f8f9fa; /* Light grey background */
+            font-family: 'Inter', sans-serif;
+            padding-top: 1rem;
+            padding-bottom: 2rem;
+        }
+        .main-container {
+            width: 100%;
+            max-width: 500px; /* Consistent max-width */
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 2rem);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-bottom: 1px solid #eee;
+        }
+        .header-top .back-arrow {
+            color: #343a40;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .header-top .back-arrow:hover {
+            color: #0d6efd;
+        }
+        .header-top h2 {
+            font-weight: 700;
+            color: #343a40;
+            font-size: 1.8rem;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: #343a40;
+            font-size: 1.4rem;
+            margin: 1.5rem 1.5rem 1rem; /* Top, horizontal, bottom margin */
+        }
+
+        /* Ride Card Styling */
+        .ride-card {
+            background-color: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(153, 153, 153, 1);
+            margin: 0 1.5rem 1.5rem; /* Consistent margins */
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden; /* For the dotted line */
+        }
+
+        .ride-card-content {
+            display: grid;
+            grid-template-columns: auto 1fr auto; /* Icon, text, amount */
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            z-index: 2; /* Ensure content is above dotted line */
+        }
+  
+
+        .location-icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem; /* Space between icons */
+        }
+        .location-icon-wrapper .circle-icon {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.6rem;
+            color: white;
+        }
+        .location-icon-wrapper .circle-icon.pickup {
+            background-color: #28a745; /* Green for pickup */
+        }
+        .location-icon-wrapper .circle-icon.dropoff {
+            background-color: #dc3545; /* Red for drop-off */
+        }
+        .location-icon-wrapper .dot {
+            width: 4px;
+            height: 4px;
+            background-color: #ced4da; /* Grey dot for dotted line */
+            border-radius: 50%;
+        }
+        .location-icon-wrapper .dotted-line {
+            position: absolute;
+            top: 1.5rem; /* Adjust based on icon size and padding */
+            bottom: 1.5rem; /* Adjust based on icon size and padding */
+            left: 2.25rem; /* Adjust to align with icons */
+            width: 2px;
+            background-image: linear-gradient(to bottom, #ced4da 50%, transparent 50%);
+            background-size: 2px 10px; /* Width of line, spacing of dots */
+            z-index: 0; /* Behind content */
+        }
+
+        .location-details {
+            text-align: left;
+            flex-grow: 1;
+        }
+        .location-details .label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+        .location-details .address {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #343a40;
+            line-height: 1.3;
+        }
+
+        .ride-info {
+            text-align: right;
+            font-weight: 600;
+        }
+        .ride-info .distance {
+            font-size: 1rem;
+            color: #343a40;
+            margin-bottom: 0.5rem;
+        }
+        .ride-info .payment {
+            font-size: 1.1rem;
+            color: black; /* Blue for payment */
+            background-color: rgb(188, 190, 245);
+            font-size: small;
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header-top">
+            <a href="#" class="back-arrow" onclick="history.back(); return false;">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <h2>Ride History</h2>
+        </div>
+
+        <h3 class="section-title">Past Rides</h3>
+
+        <!-- Ride cards will be dynamically inserted here by JavaScript -->
+        <div id="rideHistoryList">
+            <!-- Example of a dynamically inserted card (will be generated by JS) -->
+            <!--
+            <div class="ride-card">
+                <div class="dotted-line"></div>
+                <div class="ride-card-content">
+                    <div class="location-icon-wrapper">
+                        <span class="circle-icon pickup"><i class="fas fa-dot-circle"></i></span>
+                        <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                        <span class="circle-icon dropoff"><i class="fas fa-map-marker-alt"></i></span>
+                    </div>
+                    <div class="location-details">
+                        <div class="label">PICKUP</div>
+                        <div class="address">My current location</div>
+                        <div class="mt-3"></div>
+                        <div class="label">DROP-OFF</div>
+                        <div class="address">105 William St, Chicago, US</div>
+                    </div>
+                    <div class="ride-info">
+                        <div class="label">Distance</div>
+                        <div class="distance">240 Km</div>
+                        <div class="mt-3"></div>
+                        <div class="label">Payment</div>
+                        <div class="payment">₹1200</div>
+                    </div>
+                </div>
+            </div>
+            -->
+        </div>
+
+
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rideHistoryList = document.getElementById('rideHistoryList');
+
+            // Simulate fetching ride data from an API
+            const ridesData = [
+                {
+                    pickupLocation: "My current location",
+                    dropoffLocation: "105 William St, Chicago, US",
+                    distance: "240 Km",
+                    payment: "₹1200",
+                    isPaid: true
+                },
+                {
+                    pickupLocation: "My current location",
+                    dropoffLocation: "105 William St, Chicago, US",
+                    distance: "120 Km",
+                    payment: "₹2800",
+                    isPaid: true
+                },
+                {
+                    pickupLocation: "My current location",
+                    dropoffLocation: "105 William St, Chicago, US",
+                    distance: "560 Km",
+                    payment: "₹20,000",
+                    isPaid: false // Example: an unpaid ride
+                },
+                {
+                    pickupLocation: "My current location",
+                    dropoffLocation: "105 William St, Chicago, US",
+                    distance: "42 Km",
+                    payment: "₹850",
+                    isPaid: true
+                },
+                {
+                    pickupLocation: "My current location",
+                    dropoffLocation: "105 William St, Chicago, US",
+                    distance: "240 Km",
+                    payment: "₹1200",
+                    isPaid: true
+                }
+            ];
+
+            // Function to render ride history
+            function renderRideHistory() {
+                rideHistoryList.innerHTML = ''; // Clear existing content
+
+                if (ridesData.length === 0) {
+                    rideHistoryList.innerHTML = '<p class="text-center text-muted p-4">No past rides to display.</p>';
+                    return;
+                }
+
+                ridesData.forEach(ride => {
+                    const paymentClass = ride.isPaid ? '' : 'unpaid';
+                    const rideCardHtml = `
+                        <div class="ride-card">
+                            <div class="dotted-line"></div>
+                            <div class="ride-card-content">
+                                <div class="location-icon-wrapper">
+                                    <span class="circle-icon pickup"><i class="fas fa-dot-circle"></i></span>
+                                    <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                                    <span class="circle-icon dropoff"><i class="fas fa-map-marker-alt"></i></span>
+                                </div>
+                                <div class="location-details">
+                                    <div class="label">PICKUP</div>
+                                    <div class="address">${ride.pickupLocation}</div>
+                                    <div class="mt-3"></div> <!-- Spacer -->
+                                    <div class="label">DROP-OFF</div>
+                                    <div class="address">${ride.dropoffLocation}</div>
+                                </div>
+                                <div class="ride-info">
+                                    <div class="label">Distance</div>
+                                    <div class="distance">${ride.distance}</div>
+                                    <div class="mt-3"><hr><!-- Spacer --></div> 
+                                    <div class="label">Payment</div>
+                                    <div class="payment ${paymentClass}">${ride.payment}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    rideHistoryList.insertAdjacentHTML('beforeend', rideCardHtml);
+                });
+            }
+
+            // Call render function on page load
+            renderRideHistory();
+
+            // Back button functionality is handled by onclick="history.back(); return false;" in HTML
+        });
+    </script>
+</body>
+</html>

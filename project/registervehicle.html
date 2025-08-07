@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registered Vehicles</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+            background-color: #f8f9fa; /* Light grey background */
+            font-family: 'Inter', sans-serif;
+            padding-top: 1rem;
+            padding-bottom: 2rem;
+        }
+        .main-container {
+            width: 100%;
+            max-width: 500px; /* Consistent max-width */
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 0; /* Adjust padding for full height content */
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-bottom: 1px solid #eee;
+        }
+        .header-top .back-arrow {
+            color: #343a40;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .header-top .back-arrow:hover {
+            color: #0d6efd;
+        }
+        .header-top h2 {
+            font-weight: 700;
+            color: #343a40;
+            font-size: 1.8rem;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: #ffffff;
+        }
+        .summary-text {
+            font-weight: 600;
+            color: #343a40;
+            font-size: 1.1rem;
+        }
+        .sort-dropdown {
+            background-color: transparent;
+            border: none;
+            font-weight: 500;
+            color: #6c757d;
+            padding-right: 0;
+            cursor: pointer;
+        }
+        .sort-dropdown:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .add-vehicle-btn {
+            background-color: #ffffff; /* White background */
+            color: #0d6efd; /* Blue text */
+            border: 1px solid #ced4da; /* Light gray border */
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem; /* Only bottom margin, alignment handled by parent */
+            transition: all 0.2s ease; /* Transition for all properties */
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Subtle shadow */
+        }
+        .add-vehicle-btn:hover {
+            background-color: #f8f9fa; /* Slightly darker on hover */
+            border-color: #a0a0a0; /* Slightly darker border on hover */
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1); /* Slightly larger shadow on hover */
+        }
+
+        /* Vehicle Card Styling */
+        .vehicle-card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            margin: 0 1.5rem 1.5rem; /* Margin left/right and bottom */
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .vehicle-card:hover {
+            transform: translateY(-3px); /* Subtle lift on hover */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12);
+        }
+        .vehicle-card .edit-icon {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            color: #6c757d;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .vehicle-card .edit-icon:hover {
+            color: #0d6efd;
+        }
+        .vehicle-card h3 {
+            font-weight: 700;
+            color: #343a40;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .vehicle-card .vehicle-type {
+            font-size: 0.95rem;
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .vehicle-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two columns */
+            gap: 0.75rem 0.5rem; /* Row gap, column gap */
+        }
+        .vehicle-details .detail-label {
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.95rem;
+        }
+        .vehicle-details .detail-value {
+            font-weight: 600;
+            color: #343a40;
+            font-size: 0.95rem;
+            text-align: right; /* Align values to the right */
+        }
+        .vehicle-details .detail-label,
+        .vehicle-details .detail-value {
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #eee; /* Dashed line for separation */
+        }
+        .vehicle-details div:nth-child(2n) { /* Apply to value elements */
+            padding-left: 1rem; /* Adjust spacing */
+        }
+        .vehicle-details div:last-child,
+        .vehicle-details div:nth-last-child(2) {
+            border-bottom: none; /* No border for the last row */
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header-top">
+            <a href="#" class="back-arrow" onclick="history.back(); return false;">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h2>Registered Vehicles</h2>
+        </div>
+
+        <div class="summary-row">
+            <span class="summary-text">Registered Vehicles : 2</span>
+            <div class="dropdown">
+                <button class="btn sort-dropdown dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort by
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortDropdown">
+                    <li><a class="dropdown-item" href="#">Date Added (Newest)</a></li>
+                    <li><a class="dropdown-item" href="#">Date Added (Oldest)</a></li>
+                    <li><a class="dropdown-item" href="#">Vehicle Type (A-Z)</a></li>
+                    <li><a class="dropdown-item" href="#">Vehicle Number (A-Z)</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Wrapper div for right alignment -->
+        <div class="d-flex justify-content-end me-3">
+            <button class="btn add-vehicle-btn" id="addVehicleButton">
+                <i class="fas fa-plus"></i> Add More Vehicle
+            </button>
+        </div>
+
+        <!-- Vehicle Card 1: Toyota Innova -->
+        <div class="vehicle-card">
+            <i class="fas fa-pencil-alt edit-icon" data-vehicle-id="innova"></i>
+            <h3>Toyota Innova</h3>
+            <p class="vehicle-type">SUV</p>
+            <div class="vehicle-details">
+                <div class="detail-label">Vehicle Number</div>
+                <div class="detail-value">RJ27 AB 1234</div>
+
+                <div class="detail-label">Seating Capacity</div>
+                <div class="detail-value">6+1</div>
+
+                <div class="detail-label">AC/Non-AC</div>
+                <div class="detail-value">Both</div>
+
+                <div class="detail-label">Registration Date</div>
+                <div class="detail-value">2 Jan, 2024</div>
+
+                <div class="detail-label">Fuel Type</div>
+                <div class="detail-value">Diesel</div>
+
+                <div class="detail-label">Transmission</div>
+                <div class="detail-value">Manual</div>
+            </div>
+        </div>
+
+        <!-- Vehicle Card 2: Force Traveller -->
+        <div class="vehicle-card">
+            <i class="fas fa-pencil-alt edit-icon" data-vehicle-id="force-traveller"></i>
+            <h3>Force Traveller</h3>
+            <p class="vehicle-type">MINI BUS</p>
+            <div class="vehicle-details">
+                <div class="detail-label">Vehicle Number</div>
+                <div class="detail-value">RJ27 CD 5678</div>
+
+                <div class="detail-label">Seating Capacity</div>
+                <div class="detail-value">15+1</div>
+
+                <div class="detail-label">AC/Non-AC</div>
+                <div class="detail-value">Both</div>
+
+                <div class="detail-label">Registration Date</div>
+                <div class="detail-value">15 March, 2023</div>
+
+                <div class="detail-label">Fuel Type</div>
+                <div class="detail-value">Diesel</div>
+
+                <div class="detail-value">Manual</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addVehicleButton = document.getElementById('addVehicleButton');
+            const editIcons = document.querySelectorAll('.vehicle-card .edit-icon');
+            const sortDropdownItems = document.querySelectorAll('.dropdown-item');
+
+            // Simulate "Add More Vehicle" button click
+            addVehicleButton.addEventListener('click', function() {
+                alert('Add More Vehicle functionality would open here!');
+                console.log('Add More Vehicle button clicked.');
+                // In a real application, this would navigate to a form for adding a new vehicle.
+            });
+
+            // Simulate "Edit Vehicle" icon click
+            editIcons.forEach(icon => {
+                icon.addEventListener('click', function() {
+                    const vehicleId = this.dataset.vehicleId;
+                    alert(`Edit vehicle functionality would open for: ${vehicleId}!`);
+                    console.log(`Edit icon clicked for vehicle: ${vehicleId}`);
+                    // In a real application, this would navigate to an edit form pre-filled with vehicle data.
+                });
+            });
+
+            // Simulate "Sort by" dropdown item click
+            sortDropdownItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default link behavior
+                    const sortByText = this.textContent;
+                    document.getElementById('sortDropdown').textContent = sortByText; // Update dropdown text
+                    alert(`Vehicles sorted by: ${sortByText}!`);
+                    console.log(`Sorting vehicles by: ${sortByText}`);
+                    // In a real application, this would trigger a re-sorting of the vehicle list.
+                });
+            });
+        });
+    </script>
+</body>
+</html>

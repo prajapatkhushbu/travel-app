@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Account</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      width: 350px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    .checkbox {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .checkbox input {
+      margin-right: 8px;
+    }
+    .btn {
+      width: 100%;
+      background-color: #0d6efd;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .divider {
+      text-align: center;
+      margin: 20px 0;
+      position: relative;
+    }
+    .divider::before,
+    .divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background: #ccc;
+    }
+    .divider::before {
+      left: 0;
+    }
+    .divider::after {
+      right: 0;
+    }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .facebook {
+      background-color: #1877f2;
+      color: white;
+      border: none;
+    }
+    .google {
+      border: 1px solid #ccc;
+      background: white;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .footer a {
+      color: #00008b;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Create an account</h2>
+    Username<input type="text"  placeholder="Enter Your Username">
+   Phone Number*<input type="tel" placeholder="Enter Your Phone Number">
+    Password*<input type="password" placeholder="Create Your Password">
+    Confirm Password*<input type="password" placeholder="Confirm Your Password">
+    <div class="checkbox">
+      <input type="checkbox" id="terms">
+      <label for="terms">Accept All T&C</label>
+    </div>
+    <button class="btn">Sign Up</button>
+    
+    <div class="divider">Or Continue With</div>
+    
+    <div class="social-btn facebook">
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" style="margin-right: 8px; vertical-align: middle;">
+              <path fill="currentColor" d="M17 1H3c-1.1 0-2 .9-2 2v14c0 1.101.9 2 2 2h7v-7H8V9.525h2v-2.05c0-2.164 1.212-3.684 3.766-3.684l1.803.002v2.605h-1.197c-.994 0-1.372.746-1.372 1.438v1.69h2.568L15 12h-2v7h4c1.1 0 2-.899 2-2V3c0-1.1-.9-2-2-2"/>
+            </svg>
+            Signup with Facebook
+          </span>
+    </div>
+    <div class="social-btn google">
+  <span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 533.5 544.3" style="margin-right: 8px; vertical-align: middle;">
+      <path fill="#4285F4" d="M533.5 278.4c0-18.2-1.5-36.5-4.6-54.2H272v102.7h146.9c-6.4 34.3-25.6 63.5-54.6 83v68.6h88.2c51.6-47.5 80.6-117.5 80.6-200.1z"/>
+      <path fill="#34A853" d="M272 544.3c73.7 0 135.6-24.4 180.8-66.3l-88.2-68.6c-24.5 16.5-55.6 26.2-92.6 26.2-71.2 0-131.6-48-153.2-112.6H27.5v70.9C72.9 477.4 166.6 544.3 272 544.3z"/>
+      <path fill="#FBBC05" d="M118.8 323c-10.6-31.6-10.6-65.6 0-97.2V154.9H27.5c-38.4 76.8-38.4 167.7 0 244.5l91.3-70.4z"/>
+      <path fill="#EA4335" d="M272 107.7c39.9-.6 78.2 13.9 107.3 39.8l80.4-80.4C412.6 23.4 344.6-1.2 272 0 166.6 0 72.9 66.9 27.5 154.9l91.3 70.9C140.4 155.6 200.8 107.7 272 107.7z"/>
+    </svg>
+    Signup with Google
+  </span>
+</div>
+
+
+
+    <div class="footer">
+      Already have an account ? <a href="#">Login</a>
+    </div>
+  </div>
+</body>
+</html>
+</body>
+</html>

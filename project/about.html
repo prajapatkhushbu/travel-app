@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Global fixes for layout stability */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      border-radius: 8px; /* Apply rounded corners universally */
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow-x: hidden;
+      font-family: 'Inter', 'Segoe UI', sans-serif; /* Prefer Inter font */
+      background-color: white; /* Lighter background for consistency */
+    }
+
+    .container {
+      max-width: 900px; /* Adjusted max-width for content */
+      margin: 0 auto;
+      padding-left: 15px; /* Ensure consistent padding */
+      padding-right: 15px; /* Ensure consistent padding */
+    }
+
+    .about-heading {
+      font-weight: 700;
+      font-size: 2rem; /* Slightly larger heading */
+      color: #333;
+    }
+
+    .icon-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0; /* Adjusted margin */
+    }
+
+    .icon-divider::before,
+    .icon-divider::after {
+      content: '';
+      width: 40px; /* Slightly longer lines */
+      height: 2px;
+      background-color: #ccc; /* Lighter grey for lines */
+    }
+
+    .section-subtitle {
+      color: #f5b301;
+      font-weight: 600;
+      font-size: 1.1rem; /* Slightly larger subtitle */
+      margin-top: 10px;
+      margin-bottom: 20px; /* Increased bottom margin */
+    }
+
+    .description {
+      color: #555; /* Darker grey for better readability */
+      font-size: 1rem;
+      text-align: center;
+      line-height: 1.6; /* Improved line spacing */
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+
+    .highlight {
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-align: center;
+      margin-top: 25px; /* Adjusted top margin */
+      color: #333; /* Darker highlight text */
+    }
+
+    @media (min-width: 576px) {
+      .about-heading {
+        font-size: 2.5rem;
+      }
+      .description, .highlight {
+        font-size: 1.15rem;
+      }
+    }
+
+    /* Stats Section */
+    .stats-fixed {
+      position: relative;
+      overflow: hidden;
+      min-height: 50vh; /* Reduced min-height to fit content better */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px; /* Increased padding */
+      background-color: #333; /* Fallback background color */
+     
+    }
+
+    .stats-fixed::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      /* Using a placeholder image for blur effect */
+      background-image: url('images/blur.jpg'); 
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(3px); /* Apply blur directly */
+      z-index: 0;
+    }
+
+    .stats-container {
+      position: relative;
+      z-index: 1; /* keeps content above background */
+      width: 100%;
+      max-width: 500px;
+      display: flex; /* Use flexbox for layout */
+      flex-direction: column; /* Stack vertically on small screens */
+      gap: 20px; /* Space between stat boxes */
+      justify-content: center;
+    }
+
+    .stat-box {
+      background-color: rgba(0, 0, 0, 0.7); /* More transparent dark background */
+      color: #ffc107;
+      text-align: center;
+      padding: 30px 20px; /* Increased padding */
+      border-radius: 12px; /* More rounded corners */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+      justify-content: center;
+    }
+
+   .stat-box i {
+  font-size: 5rem; /* reduced from 3rem */
+  margin-bottom: 0; /* remove bottom margin since it's inline now */
+}
+
+
+    .stat-number {
+      font-size: 2.5rem; /* Larger number */
+      font-weight: 700;
+    }
+
+    .stat-label {
+      font-size: 1.1rem; /* Slightly larger label */
+      color: #ffffff; /* White label text */
+      letter-spacing: 0.8px; /* Increased letter spacing */
+      text-transform: uppercase; /* Uppercase as in image */
+    }
+
+    @media (max-width: 576px) {
+      .stat-box {
+        padding: 25px 15px;
+      }
+      .stat-number {
+        font-size: 2rem;
+      }
+      .stat-box i {
+        font-size: 3rem;
+      }
+    }
+
+    /* Achievement Section */
+    .achievement-section {
+      text-align: center;
+      padding: 50px 15px; /* Adjusted padding */
+      background-color: #fff;
+    }
+
+    .achievement-section h2 {
+      font-weight: bold;
+      margin-bottom: 15px; /* Adjusted margin */
+      color: #333;
+      font-size: 2rem;
+    }
+
+    .achievement-icon {
+      font-size: 28px; /* Larger icon */
+      margin-bottom: 20px;
+      color: #333; /* Darker color */
+      /* New styles for dividers around the achievement icon */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px; /* Space between lines and icon */
+    }
+
+    .achievement-icon::before,
+    .achievement-icon::after {
+      content: '';
+      width: 100px; /* Match the length of icon-divider lines */
+      height: 2px;
+      background-color: #ccc; /* Match the color of icon-divider lines */
+    }
+
+    .achievement-desc {
+      color: #f6b70a;
+      font-weight: 500;
+      font-size: 1.15rem; /* Slightly larger font */
+      line-height: 1.6;
+      margin-bottom: 40px; /* Increased margin */
+    }
+
+    .certificate-img {
+      max-width: 90%; /* Adjusted max-width */
+      height: auto;
+      border-radius: 12px; /* More rounded corners */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Added shadow */
+    }
+
+    @media (max-width: 576px) {
+      .achievement-desc {
+        font-size: 1.05rem;
+        padding: 0 10px;
+      }
+    }
+
+    /* Specialist Section */
+    .specialist-section {
+      text-align: center;
+      padding: 50px 15px; /* Adjusted padding */
+      background-color: #f8f9fa; /* Lighter background */
+    }
+
+    .specialist-section h2 {
+      font-weight: bold;
+      color: #333;
+      font-size: 2rem;
+    }
+
+    .car-icon {
+      font-size: 20px; /* Larger icon */
+      color: #333; /* Darker color */
+      margin-bottom: 30px; /* Increased margin */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px; /* Space between lines and icon */
+    }
+
+    .car-icon::before,
+    .car-icon::after {
+      content: '';
+      width: 100px; /* Match the length of icon-divider lines */
+      height: 2px;
+      background-color: #ccc; /* Match the color of icon-divider lines */
+    }
+
+    .yellow-box {
+      background-color: #ffcf00;
+      padding: 40px 25px; /* Increased padding */
+     
+      margin-top: 50px; /* Increased top margin */
+     
+    }
+
+    .yellow-box h5 {
+      font-weight: bold;
+      margin-bottom: 30px; /* Increased margin */
+      color: white; /* Darker heading */
+      font-size: 1.4rem;
+    }
+
+    .yellow-box p {
+      margin: 0;
+      color:white; /* Darker text for readability on yellow */
+      line-height: 1.7; /* Improved line spacing */
+      font-size: 1rem;
+    }
+
+    .yellow-box .highlight {
+      font-weight: bold;
+      color: white; /* Darker highlight on yellow */
+    }
+
+    @media (max-width: 576px) {
+      .yellow-box {
+        padding: 30px 20px;
+      }
+      .yellow-box h5 {
+        font-size: 1.2rem;
+      }
+      .yellow-box p {
+        font-size: 0.95rem;
+      }
+    }
+
+    /* Contact Section */
+    .contact-section{
+      text-align: center;
+      padding: 50px 20px;
+      background-color: #fff;
+      margin-bottom: 30px;
+    }
+
+    .divider-line{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px; /* Increased margin */
+    }
+
+    .divider-icon{
+      font-size: 20px; /* Larger icon */
+      color: #333; /* Darker color */
+      display: flex; /* Make it a flex container */
+      align-items: center;
+      justify-content: center;
+      gap: 10px; /* Space between lines and icon */
+    }
+
+    .divider-icon::before,
+    .divider-icon::after{
+      content: "";
+      width: 40px; /* Match the length of other icon-divider lines */
+      height: 2px; /* Thicker lines */
+      background-color: #ccc; /* Lighter grey */
+    }
+
+    .contact-text{
+      font-size: 20px; /* Larger text */
+      color: #1a4ca4; /* Blue color */
+      font-weight: 700; /* Bolder font */
+      text-transform: uppercase; /* Uppercase as in image */
+      margin-top: 15px; /* Space between icon and text */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container py-4 px-3 text-center">
+    <div class="text-start mb-2">
+      <a href="#" class="text-dark fs-4"><i class="fas fa-chevron-left"></i></a>
+    </div>
+    <h2 class="about-heading">ABOUT US</h2>
+    <div class="icon-divider">
+      <i class="fa-solid fa-car"></i>
+    </div>
+    <div class="section-subtitle">Who we are?</div>
+    <p class="description">
+      GVW Rent a Car is providing service in the Tourism Sector Since 1989. We provide all kinds of Taxi Cars, Mini coaches, Large coaches, Wedding Cars, Vintage Cars, Self-Drive Cars and all types of easy, smooth, Familiar and comfortable transportation facilities to the guests’, at the most nominal and Reasonable rates possible. All types of A/C and Non A/c comfortable transportation available at all times.
+    </p>
+    <p class="highlight">
+      We specialise in providing transportation services in Rajasthan, Gujarat, Delhi and all the States of North India.
+    </p>
+  </div>
+
+  <section class="stats-fixed">
+  <div class="stats-container">
+    <div class="stat-box d-flex align-items-center gap-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="50" height="40" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18M1 12C1 5.925 5.925 1 12 1s11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12m8-4v4H7V8zm8 0v4h-2V8zm-8.1 5.634l.5.865C9.922 15.4 10.89 16 12 16s2.08-.601 2.6-1.5l.5-.866l1.731 1.001l-.5.866A5 5 0 0 1 12 18a5 5 0 0 1-4.33-2.5l-.501-.865z"/></svg>
+      <div class="text-start">
+        <div class="stat-number">1000+</div>
+        <div class="stat-label">HAPPY CLIENTS</div>
+      </div>
+    </div>
+    <div class="stat-box d-flex align-items-center gap-3">
+     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="40" viewBox="0 0 512 512"><path fill="currentColor" d="M494.26 276.22c-3.6-40.41-9.53-48.28-11.77-51.24c-5.15-6.84-13.39-11.31-22.11-16a3.6 3.6 0 0 1-.91-5.68a15.93 15.93 0 0 0 4.53-12.53A16.27 16.27 0 0 0 447.65 176h-15.6a17 17 0 0 0-2 .13a8.5 8.5 0 0 0-1.41-.47c-9.24-19.53-21.89-46.27-48.11-59.32C341.64 97 270 96 256 96s-85.64 1-124.48 20.31c-26.22 13.05-38.87 39.79-48.11 59.32l-.08.16a6.5 6.5 0 0 0-1.35.34a17 17 0 0 0-2-.13H64.35A16.27 16.27 0 0 0 48 190.77a15.93 15.93 0 0 0 4.59 12.47a3.6 3.6 0 0 1-.91 5.68c-8.72 4.72-17 9.19-22.11 16c-2.24 3-8.16 10.83-11.77 51.24c-2 22.74-2.3 46.28-.73 61.44c3.29 31.5 9.46 50.54 9.72 51.33a16 16 0 0 0 13.2 10.87v.2a16 16 0 0 0 16 16h56a16 16 0 0 0 16-16c8.61 0 14.6-1.54 20.95-3.18a159 159 0 0 1 28-4.91C207.45 389 237.79 388 256 388c17.84 0 49.52 1 80.08 3.91a159 159 0 0 1 28.11 4.93c6.08 1.56 11.85 3 19.84 3.15a16 16 0 0 0 16 16h56a16 16 0 0 0 16-16v-.12A16 16 0 0 0 485.27 389c.26-.79 6.43-19.83 9.72-51.33c1.57-15.17 1.29-38.67-.73-61.45m-381.93-86.91c8-17 17.15-36.24 33.44-44.35c23.54-11.72 72.33-17 110.23-17s86.69 5.24 110.23 17c16.29 8.11 25.4 27.36 33.44 44.35l1 2.17a8 8 0 0 1-7.44 11.42C360 202 290 199.12 256 199.12s-104 2.95-137.28 3.85a8 8 0 0 1-7.44-11.42c.35-.74.72-1.49 1.05-2.24m11.93 79.63A427 427 0 0 1 72.42 272c-10.6 0-21.53-3-23.56-12.44c-1.39-6.35-1.24-9.92-.49-13.51C49 243 50 240.78 55 240c13-2 20.27.51 41.55 6.78c14.11 4.15 24.29 9.68 30.09 14.06c2.91 2.16 1.36 7.8-2.38 8.1m221.38 82c-13.16 1.5-39.48.95-89.34.95s-76.17.55-89.33-.95c-13.58-1.51-30.89-14.35-19.07-25.79c7.87-7.54 26.23-13.18 50.68-16.35s34.8-4.8 57.62-4.8s32.12 1 57.62 4.81s44.77 9.52 50.68 16.35c10.78 12.24-5.29 24.19-18.86 25.84Zm117.5-91.39c-2 9.48-13 12.44-23.56 12.44a456 456 0 0 1-52.84-3.06c-3.06-.29-4.48-5.66-1.38-8.1c5.71-4.49 16-9.91 30.09-14.06c21.28-6.27 33.55-8.78 44.09-6.69c2.57.51 3.93 3.27 4.09 5a40.6 40.6 0 0 1-.49 14.48Z"/></svg>
+      <div class="text-start">
+        <div class="stat-number">50,000+</div>
+        <div class="stat-label">TOUR COMPLETED</div>
+      </div>
+    </div>
+    <div class="stat-box d-flex align-items-center gap-3">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect width="37" height="37" x="5.5" y="5.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" rx="4" ry="4" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M32.75 19.5a4.25 4.25 0 0 1-4.25-4.25h0A4.25 4.25 0 0 0 24.25 11h-.5a4.25 4.25 0 0 0-4.25 4.25h0a4.25 4.25 0 0 1-4.25 4.25h0A4.25 4.25 0 0 0 11 23.75v.5a4.25 4.25 0 0 0 4.25 4.25h0a4.25 4.25 0 0 1 4.25 4.25h0A4.25 4.25 0 0 0 23.75 37h.5a4.25 4.25 0 0 0 4.25-4.25h0a4.25 4.25 0 0 1 4.25-4.25h0A4.25 4.25 0 0 0 37 24.25v-.5a4.25 4.25 0 0 0-4.25-4.25" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M33.37 27.005a4.25 4.25 0 0 1 0-6.01h0a4.25 4.25 0 0 0 0-6.01l-.354-.354a4.25 4.25 0 0 0-6.01 0h0a4.25 4.25 0 0 1-6.011 0h0a4.25 4.25 0 0 0-6.01 0l-.354.353a4.25 4.25 0 0 0 0 6.01h0a4.25 4.25 0 0 1 0 6.011h0a4.25 4.25 0 0 0 0 6.01l.353.354a4.25 4.25 0 0 0 6.01 0h0a4.25 4.25 0 0 1 6.011 0h0a4.25 4.25 0 0 0 6.01 0l.354-.353a4.25 4.25 0 0 0 0-6.01" stroke-width="1"/></svg>
+      <div class="text-start">
+        <div class="stat-number">30+</div>
+        <div class="stat-label">YEARS OF EXPERIENCE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <section class="achievement-section">
+    <h2>OUR ACHIEVEMENTS</h2>
+    <div class="achievement-divider"></div>
+    <div class="achievement-icon">
+      <i class="fa-solid fa-car"></i>
+    </div>
+    <p class="achievement-desc">
+      GVW Rent A Car is "first" travel company to <br>
+      be recognised by Government of <br>
+      Rajasthan in whole division.
+    </p>
+    <img src="Images/certificate.png" alt="Certificate" class="certificate-img" width="400" height="300" loading="lazy">
+  </section>
+
+  <section class="specialist-section">
+    <h2>We are specialist of :</h2>
+    <div class="divider"></div>
+    <div class="car-icon">
+      <i class="fa-solid fa-car"></i>
+    </div>
+    <div class="yellow-box">
+      <h5 class="text-black">PERSONALISED EVENTS</h5>
+      <p>
+        We at <span class="highlight">GVW Rent A Car</span> in Udaipur can <br />
+        assist you to make your day very special. <br />
+        We are specialised in arranging <span class="highlight">cars, taxi</span> <br />
+        and <span class="highlight">cabs</span> for the events in Udaipur.
+      </p>
+      <br />
+      <p>
+        Events in Udaipur inspire bright elements <br />
+        of regality as well as majesty to the most <br />
+        expected moments of life.
+      </p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    
+      <div class="divider-icon">
+        <i class="fa-solid fa-car"></i> <!-- Changed to car icon -->
+      </div>
+    </div>
+    <div class="contact-text">Contact Us</div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

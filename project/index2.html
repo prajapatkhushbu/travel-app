@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - DriveDesk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Body and container general styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .container-fluid {
+            padding: 0;
+            max-width: 400px;
+            /* Max width to mimic phone screen size */
+            background-color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .login-content {
+            padding: 2.5rem 1.5rem 2rem 1.5rem;
+            /* Adjusted top padding to match screenshot */
+        }
+
+        /* Heading styling */
+        h4 {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 50px;
+            /* Space below heading */
+            font-size: 1.5rem;
+            /* Consistent with screenshot */
+            text-align: center;
+        }
+
+        /* Form group and input styling */
+        .form-group label,
+        .form-label {
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: block;
+            text-align: left;
+        }
+
+        .required-star::after {
+            content: '*';
+            color: black;
+            margin-left: 4px;
+        }
+
+
+        .form-control {
+            border-radius: 8px;
+            font-size: 14px;
+            padding: 10px 12px;
+            color: black;
+        }
+
+        /* Change placeholder text color */
+        .form-control::placeholder {
+            color: rgba(225, 225, 225, 1);
+            opacity: 1;
+            /* Ensures color is not faded */
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+        /* Password input specific styling */
+        .password-input-group {
+            position: relative;
+
+        }
+
+        .password-input-group .form-control {
+            padding-right: 3.5rem;
+            /* Space for toggle icon */
+
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+            width: 24px;
+            height: 24px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .position-relative i {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+        }
+
+        .toggle-password svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Forgot password link styling */
+        .forgot-password-link {
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        .forgot-password-link a {
+            color: #dc3545;
+            /* Red color as in screenshot */
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .forgot-password-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Remember Me checkbox styling */
+        .remember-me-checkbox {
+            text-align: left;
+            margin-top: 0.5rem;
+        }
+
+
+        .form-check-input {
+            border-radius: 0.25rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .form-check-label {
+            color: #333;
+            font-size: 0.95rem;
+            vertical-align: middle;
+        }
+
+        .form-group label,
+        .form-label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: block;
+            text-align: left;
+        }
+
+        /* Login button styling */
+        .btn-login {
+            background-color: rgba(14, 100, 210, 1);
+            border-color: #007bff;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 0.9rem 1.5rem;
+            font-size: 1.1rem;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* "Or Continue With" separator styling */
+        .or-separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            margin-top: 50px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .or-separator::before,
+        .or-separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .or-separator:not(:empty)::before {
+            margin-right: .75em;
+        }
+
+        .or-separator:not(:empty)::after {
+            margin-left: .75em;
+        }
+
+        /* Social login buttons styling */
+        .social-login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary,
+        .btn-facebook,
+        .btn-google {
+            width: 100%;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .social-login-btn .social-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .btn-facebook {
+            background-color: rgba(24, 119, 242, 1);
+            color: white;
+            border: rgba(0, 0, 0, 0.6);
+            margin-top: 40px;
+        }
+
+        .btn-facebook:hover {
+            background-color: #145cb3;
+            border-color: #145cb3;
+            color: white;
+        }
+
+        .btn-google {
+            border: 1px solid rgba(0, 0, 0, 0.6);
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 60px;
+            margin-top: 20px;
+        }
+
+        .btn-google img {
+            width: 25px;
+            margin-right: 10px;
+        }
+
+        .btn-google:hover {
+            background-color: white;
+            border-color: black;
+            color: black;
+        }
+
+        /* Sign up link styling */
+        .login-link {
+            font-size: 13px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .login-link a {
+            color: #0044cc;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Custom Message Box Styling */
+        #messageBox {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        #messageBox button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="login-content">
+            <!-- Space above heading to match screenshot. No explicit logo in screenshot. -->
+            <div style="height: 40px;"></div> <!-- Adjust this height as needed for your logo's eventual placement -->
+
+            <h4>Hi, Welcome Back! 👋</h4>
+
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="phoneNumber" class="form-label required-star">Phone Number</label>
+                    <input type="tel" class="form-control" id="phoneNumber" placeholder="+91" required>
+                </div>
+
+
+
+                <!-- Password -->
+                <div class="mb-3">
+                    <label class="form-label">Password*</label>
+                    <div class="position-relative">
+                        <input type="password" class="form-control" id="password" placeholder="Create Your Password"
+                            required>
+                        <i class="fa fa-eye" onclick="togglePassword('password', this)"></i>
+                    </div>
+                </div>
+
+                <div class="forgot-password-link">
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <!-- Remember Me Checkbox -->
+                <div class="form-check remember-me-checkbox">
+                    <input class="form-check-input" type="checkbox" value="" id="rememberMeCheckbox">
+                    <label class="form-check-label" for="rememberMeCheckbox">
+                        Remember Me
+                    </label>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit" class="btn btn-primary btn-login">Login</button>
+            </form>
+
+            <div class="or-separator">Or Continue With</div>
+
+            <!-- Social Login Buttons -->
+            <button type="button" class="btn btn-facebook social-login-btn">
+                <i class="fab fa-facebook-f social-icon"></i> Login with Facebook
+            </button>
+            <button class="btn btn-google">
+                <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Logo">
+                Login with Google
+            </button>
+
+            <div class="login-link">
+                Already have an account? <a href="account2.html">SignUp</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS and Popper.js for Bootstrap components -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to display a custom message box
+        function showMessageBox(message) {
+            document.getElementById('messageText').innerText = message;
+            document.getElementById('messageBox').style.display = 'block';
+        }
+
+
+
+        function togglePassword(fieldId, icon) {
+            const input = document.getElementById(fieldId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+
+        // Form Submission Handler
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission to handle login client-side
+
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            //const password = document.getElementById('password').value.trim();
+            const rememberMe = document.getElementById('rememberMeCheckbox').checked;
+
+            // Basic validation
+            if (!phoneNumber || !password) {
+                showMessageBox('Please enter both phone number and password.');
+                return;
+            }
+
+            console.log('Login attempt:', { phoneNumber, password, rememberMe });
+
+            // Simulate login process: In a real application, you would send this data to a backend
+            // For now, it redirects to 'otp.html' after a short delay
+            setTimeout(() => {
+                window.location.href = 'otp.html';
+            }, 1000); // Simulate network delay
+        });
+
+        // Social Login Button Handlers (Simulated actions)
+        document.querySelector('.btn-facebook').addEventListener('click', () => {
+            showMessageBox('Logging in with Facebook...');
+        });
+
+        document.querySelector('.btn-google').addEventListener('click', () => {
+            showMessageBox('Logging in with Google...');
+        });
+
+        // Event listeners for "Sign Up" and "Forgot Password?" links
+        document.querySelector('.signup-link a').addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default link behavior
+            // In a real app, you would navigate to the signup page:
+            // window.location.href = 'signup.html';
+        });
+
+        document.querySelector('.forgot-password-link a').addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default link behavior
+            showMessageBox('Navigating to Forgot Password page... (Simulated)');
+            // In a real app, you would navigate to the forgot password page:
+            // window.location.href = 'forgot-password.html';
+        });
+    </script>
+</body>
+
+</html>

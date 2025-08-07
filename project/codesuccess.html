@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Code</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .container-fluid {
+            padding: 0;
+            max-width: 400px;
+            background-color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .header-blue {
+            background-color: #007bff;
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .header-blue .back-arrow {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            margin-right: 1rem;
+            color: white;
+        }
+
+        .header-blue h2 {
+            color: white;
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .content-area {
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .otp-message {
+            color: #333;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .otp-input-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .otp-input {
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .otp-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+        .resend-timer {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 0.9rem 1.5rem;
+            font-size: 1.1rem;
+            width: 100%;
+            margin-bottom: 1rem;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            background-color: transparent;
+            border-color: #007bff;
+            color: #007bff;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 0.9rem 1.5rem;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: #fff;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary:hover {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: #fff;
+            transform: none;
+        }
+
+
+        #messageBox {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        #messageBox button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- Header Section -->
+        <div class="header-blue">
+            <!-- Back Arrow SVG Icon -->
+            <svg class="back-arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-arrow-left">
+                <path d="m12 19-7-7 7-7" />
+                <path d="M19 12H5" />
+            </svg>
+            <h2>Verification Code</h2>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content-area">
+            <p class="otp-message">
+                One Time Password (OTP) has been sent via SMS to <span id="phoneNumberDisplay"></span>
+            </p>
+
+            <p class="text-start mb-3">Enter the OTP below to verify it.</p>
+
+            <div class="otp-input-container">
+                <input type="text" class="form-control otp-input" id="otp1" maxlength="1">
+                <input type="text" class="form-control otp-input" id="otp2" maxlength="1">
+                <input type="text" class="form-control otp-input" id="otp3" maxlength="1">
+                <input type="text" class="form-control otp-input" id="otp4" maxlength="1">
+            </div>
+
+            <p class="resend-timer" id="resendTimer">Resend OTP in <span id="countdown">00:29</span></p>
+
+            <!-- Buttons -->
+            <button type="button" class="btn btn-primary" id="verifyOtpBtn">Verify OTP</button>
+            <button type="button" class="btn btn-outline-primary" id="resendOtpBtn" disabled>Resend OTP</button>
+        </div>
+    </div>
+
+    <!-- Custom Message Box -->
+    <div id="messageBox" style="display: none;">
+        <p id="messageText"></p>
+        <button onclick="hideMessageBox()">OK</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to show a custom message box
+        // It now accepts an optional callback function to execute when the 'OK' button is clicked.
+        function showMessageBox(message, callback = null) {
+            document.getElementById('messageText').innerText = message;
+            document.getElementById('messageBox').style.display = 'block';
+
+            const okButton = document.querySelector('#messageBox button');
+            // Clear any previous event listener to prevent unintended multiple calls
+            okButton.onclick = null;
+            okButton.onclick = function () {
+                hideMessageBox(); // First, hide the message box
+                if (callback) {
+                    callback(); // Then, execute the provided callback function
+                }
+            };
+        }
+
+        // Function to hide the custom message box
+        function hideMessageBox() {
+            document.getElementById('messageBox').style.display = 'none';
+        }
+
+        // Simulate fetching the phone number from the previous page
+        const userPhoneNumber = '+91 8058694001'; // Example phone number
+
+        // Display the phone number
+        document.getElementById('phoneNumberDisplay').textContent = userPhoneNumber;
+
+        // OTP Input Logic
+        const otpInputs = document.querySelectorAll('.otp-input');
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                // Allow only single digit numbers
+                e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 1);
+
+                if (e.target.value && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+                // If last input, unfocus after entering digit
+                if (e.target.value && index === otpInputs.length - 1) {
+                    e.target.blur();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                // Handle backspace to move to previous input
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Countdown Timer Logic
+        let countdownTime = 29; // Initial countdown in seconds
+        let timerInterval;
+
+        function startTimer() {
+            const countdownElement = document.getElementById('countdown');
+            const resendOtpBtn = document.getElementById('resendOtpBtn');
+
+            resendOtpBtn.disabled = true; // Disable resend button initially
+            resendOtpBtn.classList.remove('btn-outline-primary'); // Remove outline style if present
+            resendOtpBtn.classList.add('btn-secondary'); // Add disabled style
+
+            timerInterval = setInterval(() => {
+                countdownTime--;
+                const seconds = countdownTime % 60;
+                countdownElement.textContent = `00:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                if (countdownTime <= 0) {
+                    clearInterval(timerInterval);
+                    countdownElement.textContent = '00:00';
+                    resendOtpBtn.disabled = false; // Enable resend button
+                    resendOtpBtn.classList.remove('btn-secondary');
+                    resendOtpBtn.classList.add('btn-outline-primary');
+                    document.getElementById('resendTimer').textContent = 'Resend OTP';
+                }
+            }, 1000);
+        }
+
+        // Start timer when page loads
+        window.onload = startTimer;
+
+        // Verify OTP Button Click
+        document.getElementById('verifyOtpBtn').addEventListener('click', () => {
+            let enteredOtp = '';
+            otpInputs.forEach(input => {
+                enteredOtp += input.value;
+            });
+
+            if (enteredOtp.length === 4) {
+                // In a real application, send this OTP to your backend for verification
+                showMessageBox(`Verifying OTP: ${enteredOtp}. (Simulated)`);
+
+                // Simulate backend response after a short delay
+                setTimeout(() => {
+                    const isOtpCorrect = true; // Simulate OTP verification success
+
+                    if (isOtpCorrect) {
+                        showMessageBox('OTP verified successfully!', () => {
+                            // This callback runs when the 'OK' button of the success message box is clicked
+                            window.location.href = 'success.html'; // Redirect to success page
+                        });
+                    } else {
+                        showMessageBox('OTP verification failed. Please try again.');
+                    }
+                }, 500); // Short delay to simulate network call
+
+                /*
+                // Example of a fetch call to a backend:
+                fetch('/api/verify-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ otp: enteredOtp, phoneNumber: userPhoneNumber })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessageBox('OTP verified successfully!', () => {
+                            window.location.href = 'success.html'; // Redirect to success page on 'OK' click
+                        });
+                    } else {
+                        showMessageBox('OTP verification failed: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error verifying OTP:', error);
+                    showMessageBox('An error occurred during OTP verification.');
+                });
+                */
+            } else {
+                showMessageBox('Please enter the complete 4-digit OTP.');
+            }
+        });
+
+        // Resend OTP Button Click
+        document.getElementById('resendOtpBtn').addEventListener('click', () => {
+            // In a real application, trigger a backend call to resend OTP
+            showMessageBox('Resending OTP... (Simulated)');
+
+            // Reset and start timer again
+            countdownTime = 29;
+            document.getElementById('resendTimer').innerHTML = 'Resend OTP in <span id="countdown">00:29</span>';
+            clearInterval(timerInterval); // Clear any existing timer
+            startTimer(); // Start a new timer
+
+            // Example of a fetch call:
+            /*
+            fetch('/api/resend-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ phoneNumber: userPhoneNumber })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessageBox('OTP has been resent!');
+                } else {
+                    showMessageBox('Failed to resend OTP: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error resending OTP:', error);
+                showMessageBox('An error occurred while resending OTP.');
+            });
+            */
+        });
+
+        // Back arrow functionality (simulated)
+        document.querySelector('.back-arrow').addEventListener('click', () => {
+            showMessageBox('Navigating back... (Simulated)');
+            // In a real app, you would use window.history.back() or redirect
+            // window.history.back();
+        });
+    </script>
+</body>
+
+</html>

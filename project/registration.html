@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Your Vehicle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .container-fluid {
+            padding: 0;
+            max-width: 400px;
+            background-color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+
+        .header-section {
+            padding: 1.5rem 1.5rem 1rem;
+            text-align: left;
+            background-color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header-section h2 {
+            color: #333;
+            font-weight: 700;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .form-area {
+            padding: 2rem 1.5rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            height: 50px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+        .upload-box {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            color: #888;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+            position: relative;
+        }
+
+        .upload-box:hover {
+            border-color: #007bff;
+        }
+
+        .upload-box input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-box .upload-text {
+            font-weight: 500;
+        }
+
+        .form-check-input {
+            border-radius: 0.25rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .form-check-label {
+            color: #333;
+            font-size: 0.95rem;
+            vertical-align: middle;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 0.9rem 1.5rem;
+            font-size: 1.1rem;
+            width: 100%;
+            margin-top: 1.5rem;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+
+        #messageBox {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        #messageBox button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- Header Section -->
+        <div class="header-section">
+            <h2>Register Your Vehicle</h2>
+        </div>
+
+        <!-- Form Area -->
+        <div class="form-area">
+            <form id="vehicleRegistrationForm">
+                <!-- Vehicle Type -->
+                <div class="mb-3">
+                    <label for="vehicleType" class="form-label">Vehicle Type:</label>
+                    <input type="text" class="form-control" id="vehicleType" placeholder="Enter Vehicle Type" required>
+                </div>
+
+                <!-- Vehicle Number -->
+                <div class="mb-3">
+                    <label for="vehicleNumber" class="form-label">Vehicle Number:</label>
+                    <input type="text" class="form-control" id="vehicleNumber" placeholder="Enter Vehicle Number"
+                        required>
+                </div>
+
+                <!-- Vehicle Model -->
+                <div class="mb-3">
+                    <label for="vehicleModel" class="form-label">Vehicle Model:</label>
+                    <input type="text" class="form-control" id="vehicleModel" placeholder="Enter Vehicle Model"
+                        required>
+                </div>
+
+                <!-- Vehicle Transmission Type -->
+                <div class="mb-3">
+                    <label for="transmissionType" class="form-label">Vehicle Transmission Type:</label>
+                    <input type="text" class="form-control" id="transmissionType" placeholder="Enter (Manual/Automatic)"
+                        required>
+                </div>
+
+                <!-- Vehicle Fuel Type -->
+                <div class="mb-3">
+                    <label for="fuelType" class="form-label">Vehicle Fuel Type:</label>
+                    <input type="text" class="form-control" id="fuelType"
+                        placeholder="Enter (Petrol/Diesel/CNG/Electric)" required>
+                </div>
+
+                <!-- Vehicle Registration -->
+                <div class="mb-3">
+                    <label for="vehicleRC" class="form-label">Vehicle Registration Certificate (RC):</label>
+                    <div class="upload-box">
+                        <input type="file" id="vehicleRC" accept="image/*,.pdf" required>
+                        <span class="upload-text">Upload here</span>
+                    </div>
+                </div>
+
+                <!-- Vehicle Insurance Upload -->
+                <div class="mb-3">
+                    <label for="vehicleInsurance" class="form-label">Vehicle Insurance Copy:</label>
+                    <div class="upload-box">
+                        <input type="file" id="vehicleInsurance" accept="image/*,.pdf" required>
+                        <span class="upload-text">Upload here</span>
+                    </div>
+                </div>
+
+                <!-- Vehicle Fitness Upload -->
+                <div class="mb-3">
+                    <label for="vehicleFitnessCertificate" class="form-label">Vehicle Fitness Certificate:</label>
+                    <div class="upload-box">
+                        <input type="file" id="vehicleFitnessCertificate" accept="image/*,.pdf" required>
+                        <span class="upload-text">Upload here</span>
+                    </div>
+                </div>
+
+                <!-- Vehicle Photos Upload -->
+                <div class="mb-4">
+                    <label for="vehiclePhotos" class="form-label">Vehicle Photos:</label>
+                    <div class="upload-box">
+                        <input type="file" id="vehiclePhotos" accept="image/*" multiple required>
+                        <span class="upload-text">Upload here</span>
+                    </div>
+                </div>
+
+                <!-- Terms & Condition Checkbox -->
+                <div class="form-check mb-4 text-start">
+                    <input class="form-check-input" type="checkbox" value="" id="acceptTerms" required>
+                    <label class="form-check-label" for="acceptTerms">
+                        Accept All Terms & Conditions
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+               <button type="submit" class="btn btn-primary"
+                    onclick="window.location.href='details.html'; return false;">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Message Box -->
+    <div id="messageBox" style="display: none;">
+        <p id="messageText"></p>
+        <button onclick="hideMessageBox()">OK</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to show a custom message box
+        function showMessageBox(message) {
+            document.getElementById('messageText').innerText = message;
+            document.getElementById('messageBox').style.display = 'block';
+        }
+
+        // Function to hide the custom message box
+        function hideMessageBox() {
+            document.getElementById('messageBox').style.display = 'none';
+        }
+
+        document.getElementById('vehicleRegistrationForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Basic form validation
+            const vehicleType = document.getElementById('vehicleType').value.trim();
+            const vehicleNumber = document.getElementById('vehicleNumber').value.trim();
+            const vehicleModel = document.getElementById('vehicleModel').value.trim();
+            const transmissionType = document.getElementById('transmissionType').value.trim();
+            const fuelType = document.getElementById('fuelType').value.trim();
+            const vehicleRC = document.getElementById('vehicleRC').files.length;
+            const vehicleInsurance = document.getElementById('vehicleInsurance').files.length;
+            const vehicleFitnessCertificate = document.getElementById('vehicleFitnessCertificate').files.length;
+            const vehiclePhotos = document.getElementById('vehiclePhotos').files.length;
+            const acceptTerms = document.getElementById('acceptTerms').checked;
+
+            if (!vehicleType || !vehicleNumber || !vehicleModel || !transmissionType || !fuelType) {
+                showMessageBox('Please fill in all text fields.');
+                return;
+            }
+
+            if (!vehicleRC || !vehicleInsurance || !vehicleFitnessCertificate || !vehiclePhotos) {
+                showMessageBox('Please upload all required documents and photos.');
+                return;
+            }
+
+            if (!acceptTerms) {
+                showMessageBox('You must accept the Terms & Conditions.');
+                return;
+            }
+
+            // In a real application, you would collect all this data and send it to your backend
+            
+            const formData = {
+                vehicleType: vehicleType,
+                vehicleNumber: vehicleNumber,
+                vehicleModel: vehicleModel,
+                transmissionType: transmissionType,
+                fuelType: fuelType,
+                vehicleRCUploaded: vehicleRC > 0,
+                vehicleInsuranceUploaded: vehicleInsurance > 0,
+                vehicleFitnessCertificateUploaded: vehicleFitnessCertificate > 0,
+                vehiclePhotosUploaded: vehiclePhotos > 0,
+                acceptTerms: acceptTerms
+            };
+
+            console.log('Form Data:', formData);
+            showMessageBox('Vehicle registration submitted successfully! (Simulated)');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page - Choose Ride</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            /* Changed to flex-start to allow content to naturally flow down from the top */
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            /* Light grey background */
+            font-family: 'Inter', sans-serif;
+            padding-top: 1rem;
+            /* Add some padding at the top */
+            padding-bottom: 2rem;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 500px;
+            /* Adjusted max-width for the main content area */
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            /* Ensures elements within respect border-radius */
+        }
+
+        /* --- NEW HEADER STYLES --- */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            /* White background for the new header */
+            /* border-bottom: 1px solid #eee; */
+        }
+
+        .app-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #343a40;
+            /* Dark grey for GVW */
+            line-height: 1;
+            /* Adjust line height for vertical alignment */
+        }
+
+        .app-logo span {
+            font-size: 0.9em;
+            /* Smaller "Rent a Car" */
+            font-weight: 400;
+            display: block;
+            /* Make "Rent a Car" appear on a new line */
+            margin-top: -0.2em;
+            /* Pull it slightly closer to GVW */
+            color: #6c757d;
+            /* Lighter grey for Rent a Car */
+        }
+
+        .profile-icon-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #6c757d;
+            /* Grey profile icon */
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .profile-icon-btn:hover {
+            color: #0d6efd;
+        }
+
+        /* --- END NEW HEADER STYLES --- */
+        /* --- Tab Toggle Styling --- */
+      
+    
+        .tab-selector {
+            display: flex;
+            background-color: #e9ecef;
+            /* Light grey background for the toggle bar */
+            border-radius: 2rem;
+            /* Pill shape */
+            padding: 0.25rem;
+            margin: 1.5rem auto;
+            /* Center the tab selector */
+            width: 352px;
+            /* Fixed width for the tab selector */
+            position: relative;
+            z-index: 1;
+            /* Ensure selector is above other content if needed */
+            border: black 1px solid;
+            /* Border around the tab selector */
+        }
+
+        .tab-option {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            /* Pill shape for each option */
+            cursor: pointer;
+            font-weight: 600;
+            color: #495057;
+            /* Default text color */
+            transition: all 0.3s ease;
+            /* Smooth transition for background and text */
+            text-align: center;
+            min-width: 150px;
+            /* Minimum width for each tab */
+        }
+
+        .tab-option.active {
+            background-color: #0d6efd;
+            /* Blue background for active tab */
+            color: white;
+            /* White text for active tab */
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+            /* Subtle shadow for active tab */
+        }
+
+        /* --- Location Input Styling --- */
+        .location-block {
+            background-color: #ffffff;
+            /* Lighter background for location sections */
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            position: relative;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+            /* Subtle inner shadow */
+        }
+
+        .location-label {
+            font-size: 0.85rem;
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .location-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #343a40;
+            padding-right: 3rem;
+            /* Space for the icon */
+        }
+
+        .location-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 1rem;
+            color: #0d6efd;
+            /* Blue icon */
+            font-size: 1.25rem;
+        }
+
+        .location-block.pickup .location-icon {
+            color: #28a745;
+            /* Green for pickup */
+        }
+
+        .location-block.dropoff .location-icon {
+            color: #dc3545;
+            /* Red for drop-off */
+        }
+
+        .location-input-wrapper {
+            padding-left: 2.5rem;
+            /* Space for the icon */
+            position: relative;
+        }
+
+        .map-icon-btn {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            color: #0d6efd;
+            /* Blue map icon */
+            font-size: 1.25rem;
+        }
+
+        .map-icon-btn:hover {
+            color: #0a58ca;
+        }
+
+        .clear-location-btn {
+            position: absolute;
+            right: 2.5rem;
+            /* Position next to map icon */
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            color: #6c757d;
+            /* Grey clear icon */
+            font-size: 1rem;
+        }
+
+        .clear-location-btn:hover {
+            color: #343a40;
+        }
+
+        /* --- Car Divs Styling --- */
+        .car-card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.08);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            /* Ensure cards in a row have equal height */
+        }
+
+        .car-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            object-fit: cover;
+        }
+
+        .car-card h5 {
+            font-weight: 700;
+            color: #343a40;
+            margin-bottom: 0.5rem;
+        }
+
+        .car-card .price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0d6efd;
+            margin-bottom: 0.5rem;
+        }
+
+        .car-card .description {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+            /* Allows description to take up available space */
+        }
+
+        .car-card .capacity {
+            font-size: 0.9rem;
+            color: #343a40;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .car-card .btn-details {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            width: 100%;
+            color: white;
+            transition: background-color 0.2s ease;
+        }
+
+        .car-card .btn-details:hover {
+            background-color: #0a58ca;
+            border-color: #0a58ca;
+        }
+
+        /* --- Self Drive Car Card Specific Styling --- */
+        .self-drive-car-card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.08);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            position: relative;
+            /* For positioning the price tag */
+        }
+
+        .self-drive-car-card img {
+            width: 100%;
+            /* Make image fill the width */
+            height: auto;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            object-fit: cover;
+        }
+
+        .self-drive-car-card .car-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 0.25rem;
+        }
+
+        .self-drive-car-card .car-type {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .self-drive-car-card .car-features {
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: #77818b;
+            margin-bottom: 1.5rem;
+            border-top: 1px dashed #dee2e6;
+            /* Dashed line separator */
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .self-drive-car-card .car-features span {
+            margin-right: 1rem;
+            white-space: nowrap;
+            /* Prevent features from breaking */
+        }
+
+        .self-drive-car-card .book-now-btn {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            width: 100%;
+            color: white;
+            transition: background-color 0.2s ease;
+        }
+
+        .self-drive-car-card .book-now-btn:hover {
+            background-color: #0a58ca;
+            border-color: #0a58ca;
+        }
+
+        .price-overlay {
+            position: absolute;
+            top: 0.75rem;
+            /* Adjust as needed for image margin/padding */
+            right: 0.75rem;
+            /* Adjust as needed */
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Dark semi-transparent background */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+        }
+
+        .price-overlay .currency {
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        /* Filter button style */
+        .filter-button {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            color: #495057;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-button:hover {
+            background-color: #f0f0f0;
+            border-color: #a0a0a0;
+        }
+
+        /* --- Message Box for Alerts --- */
+        .message-box-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .message-box-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .message-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 300px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .message-box-overlay.active .message-box {
+            transform: translateY(0);
+        }
+
+        .message-box h4 {
+            margin-bottom: 1rem;
+            color: #343a40;
+        }
+
+        .message-box p {
+            margin-bottom: 1.5rem;
+            color: #6c757d;
+        }
+
+        .message-box button {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .message-box button:hover {
+            background-color: #0a58ca;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="app-header">
+            <div class="app-logo">
+                GVW <span>Rent<br>a Car</span>
+            </div>
+            <button class="profile-icon-btn" id="profileIcon">
+                <i class="fas fa-user-circle"></i>
+            </button>
+        </div>
+        <div class="tab-selector mx-auto mt-4 mb-4">
+            <div class="tab-option active" id="driverTab">Driver</div>
+            <div class="tab-option" id="selfDriveTab">Self Drive</div>
+        </div>
+
+        <!-- Driver Tab Content -->
+        <div id="driverContent" class="p-3">
+            <h4 class="text-center mb-4" style="color: #343a40;">Choose Your Ride Style</h4>
+
+            <!-- Pickup Location -->
+            <div class="location-block pickup">
+                <span class="location-icon"><i class="fas fa-dot-circle"></i></span>
+                <div class="location-input-wrapper" id="pickupLocationInput">
+                    <label class="location-label">PICKUP</label>
+                    <span class="location-text" id="pickupLocationText">My current location</span>
+                </div>
+            </div>
+
+            <!-- Drop-off Location -->
+            <div class="location-block dropoff">
+                <span class="location-icon"><i class="fas fa-map-marker-alt"></i></span>
+                <div class="location-input-wrapper">
+                    <label class="location-label">DROP-OFF</label>
+                    <span class="location-text" id="dropoffLocationText">105 William St, Chicago, US</span>
+                    <button class="clear-location-btn" id="clearDropoffLocation"><i class="fas fa-times"></i></button>
+                    <button class="map-icon-btn" id="openMapSelection"><i class="fas fa-map"></i></button>
+                </div>
+            </div>
+
+            <!-- Car Divs -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="car-card">
+                        <img src="https://placehold.co/300x180/e0e0e0/343a40?text=Economy+Car" alt="Economy Car">
+                        <h5>ECONOMY CLASS</h5>
+                        <p class="price">₹13/Km</p>
+                        <p class="description">Perfect choice for short trips and smart savings</p>
+                        <p class="capacity">Passenger Capacity - 5</p>
+                        <button class="btn btn-details">Details</button>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="car-card">
+                        <img src="https://placehold.co/300x180/e0e0e0/343a40?text=Standard+Car" alt="Standard Car">
+                        <h5>STANDARD CLASS</h5>
+                        <p class="price">₹18/Km</p>
+                        <p class="description">The comfort you deserve at the price you love</p>
+                        <p class="capacity">Passenger Capacity - 5</p>
+                        <button class="btn btn-details">Details</button>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="car-card">
+                        <img src="https://placehold.co/300x180/e0e0e0/343a40?text=Business+Car" alt="Business Car">
+                        <h5>BUSINESS CLASS</h5>
+                        <p class="price">₹25/Km</p>
+                        <p class="description">Perfect choice for business trips and luxury</p>
+                        <p class="capacity">Passenger Capacity - 4</p>
+                        <button class="btn btn-details">Details</button>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="car-card">
+                        <img src="https://placehold.co/300x180/e0e0e0/343a40?text=SUV" alt="SUV">
+                        <h5>SUV</h5>
+                        <p class="price">₹28/Km</p>
+                        <p class="description">Spacious and comfortable for families and groups</p>
+                        <p class="capacity">Passenger Capacity - 7</p>
+                        <button class="btn btn-details">Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Self Drive Tab Content -->
+
+
+
+
+        <!-- Pickup Location -->
+        <div class="location-block">
+            <div class="location-block pickup">
+                <span class="location-icon"><i class="fas fa-dot-circle"></i></span>
+                <div class="location-input-wrapper" id="pickupLocationInput">
+                    <label class="location-label">PICKUP</label>
+                    <span class="location-text" id="pickupLocationText">My current location</span>
+                </div>
+            </div>
+
+            <!-- Drop-off Location -->
+            <div class="location-block dropoff">
+                <span class="location-icon"><i class="fas fa-map-marker-alt"></i></span>
+                <div class="location-input-wrapper">
+                    <label class="location-label">DROP-OFF</label>
+                    <span class="location-text" id="dropoffLocationText">105 William St, Chicago, US</span>
+                    <button class="clear-location-btn" id="clearDropoffLocation"><i class="fas fa-times"></i></button>
+                    <button class="map-icon-btn" id="openMapSelection"><i class="fas fa-map"></i></button>
+                </div>
+            </div>
+        </div>
+        <div id="selfDriveContent" class="p-3" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="" style="color: #343a40;">Grab the Keys & Go</h4>
+                <button class="btn filter-button">
+                    Filter <i class="fas fa-chevron-down ms-1"></i>
+                </button>
+            </div>
+
+            <!-- Self Drive Car Card Example (Mahindra Thar) -->
+            <div class="self-drive-car-card">
+                <img src="Images/thar-black.avif" alt="Mahindra Thar">
+                <div class="price-overlay">
+                    <span class="currency">₹</span>4,999<span class="currency">/Day</span>
+                </div>
+                <h5 class="car-title">MAHINDRA THAR</h5>
+                <p class="car-type">SUV</p>
+                <div class="car-features">
+                    <span>4 SEATS</span>|
+                    <span>DIESEL</span>|
+                    <span>55L TANK</span>|
+                    <span>MANUAL</span>|
+                    <span>4X4</span>|
+                    <span>SOFT TOP (CONVERTIBLE)</span>
+                </div>
+                <button class="btn book-now-btn">BOOK NOW</button>
+            </div>
+
+
+            <!-- You can add more self-drive car cards here if needed -->
+            <div class="self-drive-car-card">
+                <img src="Images/punch.avif" alt="TATA Punch">
+                <div class="price-overlay">
+                    <span class="currency">₹</span>1,999<span class="currency">/Day</span>
+                </div>
+                <h5 class="car-title">TATA PUNCH</h5>
+                <p class="car-type">SUV / HATCHBACK</p>
+                <div class="car-features">
+                    <span>5 SEATS</span>|
+                    <span>PETROL</span>|
+                    <span>37L TANK</span>|
+                    <span>MANUAL</span>|
+                </div>
+                <button class="btn book-now-btn">BOOK NOW</button>
+            </div>
+            <div class="self-drive-car-card">
+                <img src="Images/amaze.avif" alt=" Honda Amaze">
+                <div class="price-overlay">
+                    <span class="currency">₹</span>1,999<span class="currency">/Day</span>
+                </div>
+                <h5 class="car-title"> HONDA AMAZE</h5>
+                <p class="car-type">SEDAN</p>
+                <div class="car-features">
+                    <span>5 SEATS</span>|
+                    <span>PETROL</span>|
+                    <span>35L TANK</span>|
+                    <span>MANUAL</span>|
+                
+                </div>
+                <button class="btn book-now-btn">BOOK NOW</button>
+            </div>
+            <div class="self-drive-car-card">
+                <img src="Images/ertiga.avif" alt=" Maruti Suzuki Ertiga">
+                <div class="price-overlay">
+                    <span class="currency">₹</span>2,999<span class="currency">/Day</span>
+                </div>
+                <h5 class="car-title">MARUTI SUZUKI ERTIGA</h5>
+                <p class="car-type">SUV / 7 SEATER</p>
+                <div class="car-features">
+                    <span>7 SEATS</span>|
+                    <span>PETROL + CNG</span>|
+                    <span>45L TANK</span>|
+                    <span>MANUAL</span>|
+                </div>
+                <button class="btn book-now-btn">BOOK NOW</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Box Overlay -->
+    <div class="message-box-overlay" id="messageBoxOverlay">
+        <div class="message-box">
+            <h4 id="messageBoxTitle"></h4>
+            <p id="messageBoxContent"></p>
+            <button id="messageBoxClose">OK</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const driverTab = document.getElementById('driverTab');
+            const selfDriveTab = document.getElementById('selfDriveTab');
+            const driverContent = document.getElementById('driverContent');
+            const selfDriveContent = document.getElementById('selfDriveContent');
+            const pickupLocationText = document.getElementById('pickupLocationText');
+            const dropoffLocationText = document.getElementById('dropoffLocationText');
+            const openMapSelectionButton = document.getElementById('openMapSelection');
+            const clearDropoffLocationButton = document.getElementById('clearDropoffLocation');
+
+            // Message Box Elements
+            const messageBoxOverlay = document.getElementById('messageBoxOverlay');
+            const messageBoxTitle = document.getElementById('messageBoxTitle');
+            const messageBoxContent = document.getElementById('messageBoxContent');
+            const messageBoxCloseButton = document.getElementById('messageBoxClose');
+
+            // Function to show custom message box
+            function showMessageBox(title, content) {
+                messageBoxTitle.textContent = title;
+                messageBoxContent.textContent = content;
+                messageBoxOverlay.classList.add('active');
+            }
+
+            // Function to hide custom message box
+            messageBoxCloseButton.addEventListener('click', function () {
+                messageBoxOverlay.classList.remove('active');
+            });
+
+            // Tab switching logic
+            function switchTab(activeTab) {
+                if (activeTab === 'driver') {
+                    driverTab.classList.add('active');
+                    selfDriveTab.classList.remove('active');
+                    driverContent.style.display = 'block';
+                    selfDriveContent.style.display = 'none';
+                } else if (activeTab === 'selfDrive') {
+                    driverTab.classList.remove('active');
+                    selfDriveTab.classList.add('active');
+                    driverContent.style.display = 'none';
+                    selfDriveContent.style.display = 'block';
+                    // Re-fetch GPS for pickup if needed on Self Drive tab when it becomes active
+                    // fetchGPSLocation(); // Uncomment if you want to re-fetch location on self-drive tab switch
+                }
+            }
+
+            driverTab.addEventListener('click', function () {
+                switchTab('driver');
+            });
+
+            selfDriveTab.addEventListener('click', function () {
+                switchTab('selfDrive');
+            });
+
+            // Function to fetch current GPS location
+            function fetchGPSLocation() {
+                if (navigator.geolocation) {
+                    showMessageBox('Getting Location...', 'Please wait while we fetch your current location.');
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            // In a real app, you'd use a geocoding service (e.g., Google Maps API)
+                            // to convert lat/lon to a human-readable address.
+                            // For this example, we'll just display a mock address.
+                            const mockAddress = `Current Location (Lat: ${lat.toFixed(2)}, Lon: ${lon.toFixed(2)})`;
+                            pickupLocationText.textContent = mockAddress;
+                            messageBoxOverlay.classList.remove('active'); // Hide message box on success
+                            showMessageBox('Location Found!', 'Your current location has been updated.');
+                        },
+                        (error) => {
+                            messageBoxOverlay.classList.remove('active'); // Hide message box on error
+                            switch (error.code) {
+                                case error.PERMISSION_DENIED:
+                                    showMessageBox('Location Denied', 'Please enable location services and grant permission to fetch your current location.');
+                                    break;
+                                case error.POSITION_UNAVAILABLE:
+                                    showMessageBox('Location Unavailable', 'Your location information is unavailable. Please try again.');
+                                    break;
+                                case error.TIMEOUT:
+                                    showMessageBox('Location Timeout', 'The request to get user location timed out. Please try again.');
+                                    break;
+                                default:
+                                    showMessageBox('Error', 'An unknown error occurred while fetching your location.');
+                                    break;
+                            }
+                        },
+                        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                    );
+                } else {
+                    showMessageBox('GPS Not Supported', 'Geolocation is not supported by your browser. Please enter your location manually.');
+                }
+            }
+
+            // Automatically fetch GPS location for Pickup on page load (Driver tab)
+            // This might trigger a permission request on first load
+            fetchGPSLocation();
+
+
+            // Click handler for Pickup Location block to trigger GPS fetch
+            document.getElementById('pickupLocationInput').addEventListener('click', function () {
+                fetchGPSLocation();
+            });
+
+
+            // Simulate opening map for Drop-off location selection
+            openMapSelectionButton.addEventListener('click', function () {
+                showMessageBox('Map Selection', 'Map functionality to select drop-off location would open here. (Simulated)');
+                console.log('Simulating map opening for location selection.');
+                // In a real application, this would open a map modal or a new page
+                // where the user can pick a location.
+            });
+
+            // Clear Drop-off Location
+            clearDropoffLocationButton.addEventListener('click', function (event) {
+                event.stopPropagation(); // Prevent click from bubbling up to location-block
+                dropoffLocationText.textContent = 'Enter Drop-off Location'; // Or clear completely
+                showMessageBox('Location Cleared', 'Drop-off location has been cleared.');
+            });
+        });
+    </script>
+</body>
+
+</html>

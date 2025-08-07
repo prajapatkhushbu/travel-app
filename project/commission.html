@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commission Breakdown</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+            background-color: #f8f9fa; /* Light grey background */
+            font-family: 'Inter', sans-serif;
+            padding-top: 1rem;
+            padding-bottom: 2rem;
+        }
+        .main-container {
+            width: 100%;
+            max-width: 500px; /* Consistent max-width */
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 2rem);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-bottom: 1px solid #eee;
+        }
+        .header-top .back-arrow {
+            color: #343a40;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .header-top .back-arrow:hover {
+            color: #0d6efd;
+        }
+        .header-top h2 {
+            font-weight: 700;
+            color: #343a40;
+            font-size: 1.8rem;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        /* Summary Cards Section */
+        .summary-cards-section {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-bottom: 1px solid #eee;
+        }
+        .summary-card {
+            flex: 1;
+            background-color:rgba(24, 119, 242, 0.09); /* Light grey background */
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.05);
+        }
+        .summary-card .commission{
+          background-color: rgba(231, 40, 79, 0.09);
+        }
+        .summary-card .label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .summary-card .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #343a40;
+            line-height: 1.2;
+        }
+        .summary-card.earned .value {
+            color: #0d6efd; /* Blue for total earned */
+        }
+        .summary-card.commission .value {
+            color: #dc3545; /* Red for commission given */
+           
+        }
+       
+
+        /* Note Section */
+        .note-section {
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-bottom: 1px solid #eee;
+        }
+        .note-section p {
+            font-size: 0.9rem;
+            color: black;
+            margin: 0;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+        .note-section strong {
+            color:red;
+        }
+
+        /* Commission Table Section */
+        .commission-table-section {
+            padding: 1.5rem;
+            background-color: white;
+            flex-grow: 1; /* Allows the table to fill available space */
+            overflow-x: auto; /* Enable horizontal scrolling for wide tables */
+        }
+        .commission-table {
+            width: 100%;
+            border-collapse: separate; /* For rounded corners on cells */
+            border-spacing: 0 0.5rem; /* Space between rows */
+            min-width: 450px; /* Ensure table doesn't get too small */
+        }
+        .commission-table th,
+        .commission-table td {
+            padding: 0.75rem;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        .commission-table thead th {
+            background-color: #f0f2f5; /* Header background */
+            font-weight: 600;
+            color: #343a40;
+            border-top: none;
+            border-bottom: none;
+        }
+        .commission-table tbody tr {
+            background-color: #f0f2f5;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .commission-table tbody tr:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
+        }
+        .commission-table tbody td {
+            font-weight: 500;
+            border-top: 1px solid #eee; /* Light border between rows */
+            border-bottom: 1px solid #eee;
+        }
+        .commission-table tbody tr:first-child td {
+            border-top: none; /* No top border for first row */
+        }
+        .commission-table tbody tr:last-child td {
+            border-bottom: none; /* No bottom border for last row */
+        }
+
+        .commission-table .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            
+        }
+        .commission-table .status-badge.due {
+          
+            color:red; /* Darker orange text */
+        }
+        .commission-table .status-badge.paid {
+            
+            color: #388e3c; /* Darker green text */
+        }
+        /* Specific column alignments */
+        .commission-table th:nth-child(2),
+        .commission-table td:nth-child(2) {
+            text-align: right; /* Ride Fare */
+        }
+        .commission-table th:nth-child(3),
+        .commission-table td:nth-child(3) {
+            text-align: right; /* Comm. Amt. */
+        }
+        .commission-table th:nth-child(4),
+        .commission-table td:nth-child(4) {
+            text-align: center; /* Status */
+        }
+        .commission-table th:first-child {
+            border-top-left-radius: 0.75rem; /* Rounded corners for header */
+            border-bottom-left-radius: 0.75rem;
+        }
+        .commission-table th:last-child {
+            border-top-right-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+        .commission-table tbody tr td:first-child {
+            border-top-left-radius: 0.75rem;
+            border-bottom-left-radius: 0.75rem;
+        }
+        .commission-table tbody tr td:last-child {
+            border-top-right-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header-top">
+            <a href="driver.html" class="back-arrow" onclick="history.back(); return false;">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <h2>Commission Breakdown</h2>
+        </div>
+
+        <div class="summary-cards-section">
+            <div class="summary-card earned">
+                <p class="label">Total earned</p>
+                <h3 class="value" id="totalEarnedValue">₹85,920.70</h3>
+            </div>
+            <div class="summary-card commission">
+                <p class="label">Commission given</p>
+                <h3 class="value" id="commissionGivenValue">₹6,873.65</h3>
+            </div>
+        </div>
+
+        <div class="note-section">
+            <p><strong>Note:</strong> 8% of each ride fare is deducted as commission by GVW agency.</p>
+        </div>
+
+        <div class="commission-table-section">
+            <table class="commission-table">
+                <thead>
+                    <tr>
+                        <th>Ride Date</th>
+                        <th>Ride Fare</th>
+                        <th>Comm. Amt.</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="commissionTableBody">
+                    <!-- Table rows will be dynamically inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const commissionTableBody = document.getElementById('commissionTableBody');
+            const totalEarnedValue = document.getElementById('totalEarnedValue');
+            const commissionGivenValue = document.getElementById('commissionGivenValue');
+
+            // Sample commission data (this would come from an API in a real application)
+            const commissionData = [
+                { date: '11 June, 2025', fare: 12000, commission: 960, status: 'due' },
+                { date: '22 Apr, 2025', fare: 9800, commission: 784, status: 'paid' },
+                { date: '14 March, 2025', fare: 8750, commission: 700, status: 'paid' },
+                { date: '01 Feb, 2025', fare: 7500, commission: 600, status: 'paid' },
+                { date: '10 Jan, 2025', fare: 8400, commission: 672, status: 'paid' },
+                { date: '18 Dec, 2024', fare: 9300, commission: 744, status: 'paid' },
+                { date: '02 Nov, 2024', fare: 6100, commission: 488, status: 'paid' },
+                { date: '15 Sep, 2024', fare: 6800, commission: 544, status: 'paid' },
+                { date: '03 July, 2024', fare: 8670, commission: 693.60, status: 'paid' },
+                { date: '20 May, 2024', fare: 5400, commission: 360, status: 'paid' },
+            ];
+
+            // Function to format currency
+            function formatCurrency(amount) {
+                return `₹${amount.toLocaleString('en-IN', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                })}`;
+            }
+
+            // Function to calculate and update summary totals
+            function updateSummaryTotals() {
+                let totalEarned = 0;
+                let totalCommission = 0;
+
+                commissionData.forEach(item => {
+                    totalEarned += item.fare;
+                    totalCommission += item.commission;
+                });
+
+                totalEarnedValue.textContent = formatCurrency(totalEarned);
+                commissionGivenValue.textContent = formatCurrency(totalCommission);
+            }
+
+            // Function to render commission table
+            function renderCommissionTable() {
+                commissionTableBody.innerHTML = ''; // Clear existing content
+
+                if (commissionData.length === 0) {
+                    commissionTableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-4">No commission data to display.</td></tr>`;
+                    return;
+                }
+
+                commissionData.forEach(item => {
+                    const row = document.createElement('tr');
+                    const statusClass = item.status === 'due' ? 'due' : 'paid';
+
+                    row.innerHTML = `
+                        <td>${item.date}</td>
+                        <td>${formatCurrency(item.fare)}</td>
+                        <td>${formatCurrency(item.commission)}</td>
+                        <td><span class="status-badge ${statusClass}">${item.status}</span></td>
+                    `;
+                    commissionTableBody.appendChild(row);
+                });
+            }
+
+            // Call render functions on page load
+            updateSummaryTotals();
+            renderCommissionTable();
+
+            // Back button functionality is handled by onclick="history.back(); return false;" in HTML
+        });
+    </script>
+</body>
+</html>

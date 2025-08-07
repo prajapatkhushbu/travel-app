@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveDesk</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Inter for font style -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: white; /* Light grey background */
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            min-height: 100vh; /* Ensure body takes at least full viewport height */
+        }
+        .container-fluid {
+            max-width: 600px; /* Max width to mimic mobile view */
+            padding: 0;
+            background-color: #f0f2f5; /* Consistent background for the entire content area */
+        }
+        .header {
+            background-color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column; /* Stack children vertically */
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            top: 0;
+            z-index: 1000;
+        }
+        .header .header-top-row {
+            display: flex;
+            justify-content: space-between; /* Push DriveDesk left, hamburger right */
+            align-items: center;
+            width: 100%; /* Take full width of parent */
+            margin-bottom: 10px; /* Space between the two lines */
+        }
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0; /* Remove default margin from h1 */
+        }
+        .header .fa-bars {
+            font-size: 1.25rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Wrapper to center the toggle container on its own line */
+        .header .toggle-container-wrapper {
+            width: 100%; /* Ensure wrapper takes full width */
+            display: flex;
+            justify-content: center; /* Center the toggle-container */
+        }
+
+        .header .toggle-container {
+            display: flex;
+            background-color: white; /* Background for toggle section */
+            border-radius: 20px;
+            padding: 4px 6px;
+            /* Removed margin-right as it's no longer next to fa-bars */
+        }
+        .header .toggle-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 16px; /* Rounded pill effect */
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            white-space: nowrap; /* Prevent text from wrapping */
+        }
+        .header .toggle-text.inactive {
+            color:red; /* Grey for inactive */
+        }
+        .header .toggle-text.active {
+            color: #007bff; /* Blue for active */
+        }
+
+        /* Custom toggle switch */
+        .header .form-check {
+            padding-left: 0; /* Remove default padding for custom placement */
+            margin: 0 5px; /* Space between text and switch */
+            display: flex;
+            align-items: center;
+            height: 28px; /* Adjust height to center with text */
+        }
+
+        .header .form-check-input {
+            width: 40px; /* Wider switch */
+            height: 22px; /* Taller switch */
+            border-radius: 20px;
+            margin: 0; /* Remove default margin */
+            cursor: pointer;
+            position: relative; /* For custom background */
+            background-color: #dc3545; /* Red for unavailable (off) */
+            border: none;
+            transition: background-color 0.2s ease-in-out;
+            vertical-align: middle; /* Align with text */
+        }
+        .header .form-check-input:checked {
+            background-color: #007bff; /* Blue for available (on) */
+        }
+        .header .form-check-input:focus {
+            box-shadow: none; /* Remove focus outline */
+        }
+
+        /* Unavailable State Content */
+        .main-content-unavailable {
+            min-height: 250px; /* Give some height, but allow to collapse if other content is present */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .main-content-unavailable h2 {
+            font-size: 2.2rem; /* Large font size */
+            font-weight: 600;
+            color: #f77a7f; /* Light reddish pink from screenshot */
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        .main-content-unavailable p {
+            font-size: 1.0rem; /* Slightly larger text */
+            color: #555;
+            max-width: 300px; /* Limit width for readability */
+            line-height: 1.5;
+        }
+
+        /* General Card Styling */
+        .card {
+            border-radius: 12px; /* More rounded corners */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* Softer shadow */
+            margin-bottom: 20px;
+            overflow: hidden; /* Ensure content stays within rounded corners */
+            background-color: #fff;
+        }
+
+        /* Card Section Header (Live Ride Request, Scheduled Ride Request, Scheduled Bookings) */
+        .section-header {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+            padding: 15px 20px 10px 20px;
+            background-color: transparent; /* No background for section header itself */
+            margin-bottom: 5px; /* Space between header and first card */
+        }
+
+        /* Card Body Specifics */
+        .card-body {
+            padding: 20px;
+        }
+        .card-body .row {
+            margin-bottom: 10px;
+        }
+        .card-body .col-6 {
+            font-size: 0.9rem;
+        }
+        .card-body .col-12 {
+            font-size: 0.9rem;
+        }
+        .card-body .col-6 strong, .card-body .col-12 strong {
+            display: block;
+            color: #333;
+            margin-bottom: 3px;
+            font-weight: 500; /* Slightly lighter weight for labels */
+        }
+        .card-body .col-6 span, .card-body .col-12 span {
+            color: #666;
+            font-weight: 400;
+        }
+        .card-body .col-6 .price {
+            color: #007bff; /* Blue for prices */
+            font-weight: 600;
+        }
+        .card-body .price-currency {
+            font-size: 0.8em; /* Smaller currency symbol */
+            vertical-align: super;
+        }
+        .card-body .currency-label {
+            font-size: 0.8em; /* Smaller label next to currency */
+            color: #999;
+            margin-left: 3px;
+        }
+
+        /* Location Styling */
+        .location-group {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            position: relative; /* For the dashed line */
+        }
+        .location-group .icon {
+            font-size: 1rem;
+            margin-right: 10px;
+            z-index: 1; /* Ensure icon is above the line */
+            position: relative;
+        }
+        .location-group .icon.pickup {
+            color: rgba(76, 229, 177, 1); /* Blue for pickup dot */
+        }
+        .location-group .icon.dropoff {
+            color: #dc3545; /* Red for dropoff pin */
+        }
+        .location-group .location-text {
+            flex-grow: 1;
+            padding-bottom: 5px; /* Space for the underline */
+        }
+        .location-group .location-text strong {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 2px;
+            display: block;
+            text-transform: uppercase;
+        }
+        .location-group .location-text span {
+            font-size: 1rem;
+            color: #333;
+            font-weight: 500;
+            border-bottom: 1px dashed #ccc; /* Dashed underline */
+            padding-bottom: 2px; /* Space between text and dashed line */
+            display: inline-block; /* To apply border-bottom correctly */
+            width: 100%; /* Make underline extend full width */
+        }
+        .location-line {
+            position: absolute;
+            left: 20px; /* Align with icons */
+            top: 25px; /* Adjust to connect the dots */
+            height: calc(100% - 40px); /* Height between the two location icons */
+            width: 1px;
+            background-color: #ccc;
+            z-index: 0;
+            transform: translateX(-50%);
+        }
+
+        /* Card Footer Buttons */
+        .card-footer-custom {
+            background-color: #fff;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end; /* Align buttons to the right */
+            gap: 10px; /* Space between buttons */
+             justify-content: center;
+        }
+        .card-footer-custom .btn {
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 8px 18px;
+            font-size: 0.9rem;
+            min-width: 100px; /* Ensure buttons have a minimum width */
+            
+        }
+        .btn-reject {
+            background-color: #dc3545; /* Red */
+            border-color: #dc3545;
+            color: #fff;
+        }
+        .btn-reject:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+        .btn-accept {
+            background-color: #007bff; /* Blue */
+            border-color: #007bff;
+            color: #fff;
+        }
+        .btn-accept:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .btn-cancel {
+            background-color: #6c757d; /* Grey */
+            border-color: #6c757d;
+            color: #fff;
+        }
+        .btn-cancel:hover {
+            background-color: white;
+            border-color: #545b62;
+        }
+        .btn-confirm {
+            background-color: #007bff; /* Blue */
+            border-color: #007bff;
+            color: #fff;
+        }
+        .btn-confirm:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .confirm-reject-message {
+            background-color:rgba(255, 58, 58, 0.41); /* Light yellow background */
+            color: black; /* Dark yellow text */
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            text-align: center;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            border-top: 1px black;
+        }
+
+        .booking-time-left {
+            background-color: #343a40; /* Dark background */
+            color: #fff;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        /* Small screen adjustments */
+        @media (max-width: 576px) {
+            .header {
+                padding: 10px 15px;
+            }
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            .header .toggle-container {
+                padding: 3px 5px;
+            }
+            .header .toggle-text {
+                font-size: 0.8rem;
+                padding: 3px 6px;
+            }
+            .header .form-check-input {
+                width: 36px;
+                height: 20px;
+            }
+            .header .fa-bars {
+                font-size: 1.1rem;
+            }
+            .main-content-unavailable h2 {
+                font-size: 1.8rem;
+            }
+            .main-content-unavailable p {
+                font-size: 0.9rem;
+            }
+            .section-header {
+                font-size: 1.1rem;
+                padding: 10px 15px 5px 15px;
+            }
+            .card-body {
+                padding: 15px;
+            }
+            .card-body .col-6, .card-body .col-12 {
+                font-size: 0.8rem;
+            }
+            .location-group .icon {
+                font-size: 0.9rem;
+            }
+            .location-group .location-text strong {
+                font-size: 0.75rem;
+            }
+            .location-group .location-text span {
+                font-size: 0.9rem;
+            }
+            .card-footer-custom {
+                flex-direction: column; /* Stack buttons on small screens */
+                gap: 8px;
+                padding: 10px 15px;
+            }
+            .card-footer-custom .btn {
+                width: 100%; /* Full width buttons */
+            }
+            .confirm-reject-message {
+                font-size: 0.75rem;
+            }
+            .booking-time-left {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-top-row">
+                <h1><i class="fas fa-arrow-left me-2"></i>DriveDesk</h1>
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="toggle-container-wrapper">
+                <div class="toggle-container">
+                    <span class="toggle-text unavailable-text inactive" id="unavailableText">Unavailable</span>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" id="availableToggle">
+                    </div>
+                    <span class="toggle-text available-text active" id="availableText">I'm Available</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Wrapper - this will contain all sections -->
+        <div class="main-content-wrapper p-3">
+            <!-- Content for Unavailable State (hidden by default initially, controlled by JS) -->
+            <div class="main-content-unavailable" id="unavailableStateContent">
+                <h2>You're not<br>visible to<br>customers</h2>
+                <p>You're not accepting rides right now.<br>Switch to I'm Available to start getting<br>ride requests.</p>
+            </div>
+
+            <!-- Live Ride Request Section (visible by default initially, controlled by JS) -->
+            <div class="live-ride-request-section" id="liveRideRequestSection">
+                <h3 class="section-header">Live Ride Request</h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="location-group">
+                            <i class="fas fa-circle-dot icon pickup"></i>
+                            <div class="location-text">
+                                <strong>PICKUP</strong>
+                                <span>10 Salturny Bauk, Mumbai, India</span>
+                            </div>
+                            <div class="location-line"></div> <!-- Dashed line between locations -->
+                        </div>
+                        <div class="location-group mb-4">
+                            <i class="fas fa-location-dot icon dropoff"></i>
+                            <div class="location-text">
+                                <strong>DROP-OFF</strong>
+                                <span>105 William St, Mumbai, India</span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>CUSTOMER NAME</strong>
+                                <span>Nick Oberoy</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>FARE ESTIMATE <span class="currency-label">(ONE WAY)</span></strong>
+                                <span class="price">₹ 2,880 <span class="currency-label">(UPI)</span></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>CUSTOMER CONTACT</strong>
+                                <span>+91 80XXXXX01</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>TRIP DISTANCE & DURATION</strong>
+                                <span>160 Km | 5 Hour</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>VEHICLE TYPE</strong>
+                                <span>Honda Amaze</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>PASSENGER COUNT</strong>
+                                <span>4</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer-custom">
+                        <button type="button" class="btn btn-reject color-red">REJECT</button>
+                        <button type="button" class="btn btn-accept">ACCEPT</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scheduled Ride Request Section -->
+            <div class="scheduled-ride-request-section" id="scheduledRideRequestSection">
+                <h3 class="section-header">Scheduled Ride Request</h3>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="location-group">
+                            <i class="fas fa-circle-dot icon pickup"></i>
+                            <div class="location-text">
+                                <strong>PICKUP</strong>
+                                <span>10, Udaipur, Rajasthan, India</span>
+                            </div>
+                            <div class="location-line"></div>
+                        </div>
+                        <div class="location-group mb-4">
+                            <i class="fas fa-location-dot icon dropoff"></i>
+                            <div class="location-text">
+                                <strong>DROP-OFF</strong>
+                                <span>105 William St, Mumbai, India</span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>CUSTOMER NAME</strong>
+                                <span>Dev Singhal</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>FARE ESTIMATE <span class="currency-label">(ONE WAY)</span></strong>
+                                <span class="price">₹ 54,450 <span class="currency-label">(UPI)</span></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>CUSTOMER CONTACT</strong>
+                                <span>+91 92XXXXX81</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>TRIP DISTANCE & DURATION</strong>
+                                <span>990 Km | 16 Hour</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>PICKUP DATE & TIME</strong>
+                                <span>4 June, 09:00 PM</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>PASSENGER COUNT</strong>
+                                <span>42</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <strong>VEHICLE TYPE</strong>
+                                <span>Volvo B9R (Bus)</span>
+                            </div>
+                        </div>
+                    </div>
+                   <div class="card-footer-custom">
+                        <button type="button" class="btn btn-reject color-red">REJECT</button>
+                        <button type="button" class="btn btn-accept">ACCEPT</button>
+                    </div>
+                    <div class="confirm-reject-message text-center">
+                        Confirm or Reject within 2 hours.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scheduled Bookings Section -->
+            <div class="scheduled-bookings-section" id="scheduledBookingsSection">
+                <h3 class="section-header">Scheduled Bookings</h3>
+                <!-- Booking Card 1 -->
+                <div class="card">
+                    <div class="booking-time-left" id="time-left-1">Time Left: 02d 04:30:10</div>
+                    <div class="card-body">
+                        <div class="location-group">
+                            <i class="fas fa-circle-dot icon pickup"></i>
+                            <div class="location-text">
+                                <strong>PICKUP</strong>
+                                <span>10 Salturny Bauk, Mumbai, India</span>
+                            </div>
+                            <div class="location-line"></div>
+                        </div>
+                        <div class="location-group mb-4">
+                            <i class="fas fa-location-dot icon dropoff"></i>
+                            <div class="location-text">
+                                <strong>DROP-OFF</strong>
+                                <span>105 William St, Mumbai, India</span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>CUSTOMER NAME</strong>
+                                <span>Alex Amor</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>FARE ESTIMATE <span class="currency-label">(ONE WAY)</span></strong>
+                                <span class="price">₹ 1,300 <span class="currency-label">(CASH)</span></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>CUSTOMER CONTACT</strong>
+                                <span>+91 79XXXXX42</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>TRIP DISTANCE & DURATION</strong>
+                                <span>52 Km | 1 Hour</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>PICKUP DATE & TIME</strong>
+                                <span>2 June, 10:00 AM</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>PASSENGER COUNT</strong>
+                                <span>2</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <strong>VEHICLE TYPE</strong>
+                                <span>Mercedes-Benz GLA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Card 2 -->
+                <div class="card">
+                    <div class="booking-time-left" id="time-left-2">Time Left: 11d 10:38:00</div>
+                    <div class="card-body">
+                        <div class="location-group">
+                            <i class="fas fa-circle-dot icon pickup"></i>
+                            <div class="location-text">
+                                <strong>PICKUP</strong>
+                                <span>10 Salturny Bauk, Mumbai, India</span>
+                            </div>
+                            <div class="location-line"></div>
+                        </div>
+                        <div class="location-group mb-4">
+                            <i class="fas fa-location-dot icon dropoff"></i>
+                            <div class="location-text">
+                                <strong>DROP-OFF</strong>
+                                <span>105 William St, Mumbai, India</span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>CUSTOMER NAME</strong>
+                                <span>Jeya Beber</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>FARE ESTIMATE <span class="currency-label">(ROUND TRIP)</span></strong>
+                                <span class="price">₹ 11,984 <span class="currency-label">(CASH)</span></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>CUSTOMER CONTACT</strong>
+                                <span>+91 79XXXXX42</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>TRIP DISTANCE & DURATION</strong>
+                                <span>428 Km | 9 Hour</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>PICKUP DATE & TIME</strong>
+                                <span>11 June, 07:30 AM</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>PASSENGER COUNT</strong>
+                                <span>6</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <strong>VEHICLE TYPE</strong>
+                                <span>MARUTI SUZUKI ERTIGA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS (Popper and Bootstrap bundle) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const availableToggle = document.getElementById('availableToggle');
+            const unavailableText = document.getElementById('unavailableText');
+            const availableText = document.getElementById('availableText');
+            const unavailableStateContent = document.getElementById('unavailableStateContent');
+            const liveRideRequestSection = document.getElementById('liveRideRequestSection');
+            const scheduledRideRequestSection = document.getElementById('scheduledRideRequestSection');
+            const scheduledBookingsSection = document.getElementById('scheduledBookingsSection');
+
+            // Function to update the visibility of sections
+            function updateSectionVisibility() {
+                if (availableToggle.checked) {
+                    // "I'm Available" state: show ride requests/bookings
+                    unavailableStateContent.style.display = 'none';
+                    liveRideRequestSection.style.display = 'block';
+                    scheduledRideRequestSection.style.display = 'block';
+                    scheduledBookingsSection.style.display = 'block';
+                    unavailableText.classList.remove('active');
+                    unavailableText.classList.add('inactive');
+                    availableText.classList.add('active');
+                    availableText.classList.remove('inactive');
+                    availableToggle.style.backgroundColor = '#007bff'; // Blue
+                } else {
+                    // "Unavailable" state: show unavailable message
+                    unavailableStateContent.style.display = 'flex'; // Use flex for centering
+                    liveRideRequestSection.style.display = 'none';
+                    scheduledRideRequestSection.style.display = 'none';
+                    scheduledBookingsSection.style.display = 'none';
+                    unavailableText.classList.add('active');
+                    unavailableText.classList.remove('inactive');
+                    availableText.classList.remove('active');
+                    availableText.classList.add('inactive');
+                    availableToggle.style.backgroundColor = '#dc3545'; // Red
+                }
+            }
+
+            // Initial state: based on the previous screenshot, it was "Unavailable"
+            availableToggle.checked = false;
+            updateSectionVisibility(); // Apply initial visibility
+
+            // Update toggle colors and text classes on change
+            availableToggle.addEventListener('change', updateSectionVisibility);
+
+            // Handle clicking on "Unavailable" or "I'm Available" text to toggle
+            unavailableText.addEventListener('click', function() {
+                if (availableToggle.checked) { // If currently 'Available', turn off
+                    availableToggle.checked = false;
+                    availableToggle.dispatchEvent(new Event('change')); // Trigger change event
+                }
+            });
+
+            availableText.addEventListener('click', function() {
+                if (!availableToggle.checked) { // If currently 'Unavailable', turn on
+                    availableToggle.checked = true;
+                    availableToggle.dispatchEvent(new Event('change')); // Trigger change event
+                }
+            });
+
+            // JavaScript for countdown (for scheduled bookings)
+            function updateCountdown(targetDate, elementId) {
+                const countdownElement = document.getElementById(elementId);
+                if (!countdownElement) return;
+
+                const interval = setInterval(() => {
+                    const now = new Date().getTime();
+                    const distance = targetDate - now;
+
+                    if (distance < 0) {
+                        clearInterval(interval);
+                        countdownElement.textContent = "Time Left: Expired";
+                        return;
+                    }
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    countdownElement.textContent = `Time Left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                }, 1000);
+            }
+
+            // Example target dates (adjust as needed for current time to match screenshot)
+            // For Card 1: 2 days, 4 hours, 30 minutes, 10 seconds from now (based on screenshot)
+            let targetDate1 = new Date();
+            targetDate1.setDate(targetDate1.getDate() + 2);
+            targetDate1.setHours(targetDate1.getHours() + 4);
+            targetDate1.setMinutes(targetDate1.getMinutes() + 30);
+            targetDate1.setSeconds(targetDate1.getSeconds() + 10);
+
+            // For Card 2: 11 days, 10 hours, 38 minutes from now (based on screenshot)
+            let targetDate2 = new Date();
+            targetDate2.setDate(targetDate2.getDate() + 11);
+            targetDate2.setHours(targetDate2.getHours() + 10);
+            targetDate2.setMinutes(targetDate2.getMinutes() + 38);
+
+            updateCountdown(targetDate1.getTime(), 'time-left-1');
+            updateCountdown(targetDate2.getTime(), 'time-left-2');
+        });
+    </script>
+</body>
+</html>
